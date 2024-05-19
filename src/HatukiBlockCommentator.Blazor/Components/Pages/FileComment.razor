@@ -1,61 +1,85 @@
 ﻿@page "/file-comment"
 @using HatukiBlockCommentator.Utils
 
+<style>
+    .hbc-big-text {
+        width: 100%;
+        height: 100px;
+    }
+
+    .hbc-mid-text {
+        width: 80%;
+    }
+</style>
+
+
+
 <PageTitle>Hatuki Block Commentator ⭐</PageTitle>
 
 <h3>File Commentator</h3>
 <div class="container">
+
     <div class="row">
-        <div class="col-">
+        <div class="col"><label>Project Name : </label></div>
+        <div class="col"><label>File Name : </label></div>
+        <div class="col"><label>Width : </label></div>
+    </div>
+    <div class="row">
+        <div class="col"><input class="hbc-mid-text" @bind="ProjectName" /></div>
+        <div class="col"><input class="hbc-mid-text" @bind="FileName" /></div>
+        <div class="col"><input class="hbc-mid-text" @bind="Width" /></div>
+    </div>
+    <div class="row">
+        <div class="col"><label>Creator : </label></div>
+        <div class="col"><label>Create Date : </label></div>
+        <div class="col"><label>Update Date : </label></div>
+    </div>
+    <div class="row">
+        <div class="col"><input class="hbc-mid-text" @bind="Creator" /></div>
+        <div class="col"><input class="hbc-mid-text" @bind="Create" /></div>
+        <div class="col"><input class="hbc-mid-text" @bind="Update" /></div>
+    </div>
+    <div class="row">
+        <div class="col"><label>Description :</label></div>
+    </div>
+    <div class="row">
+        <div class="col"><textarea class="hbc-big-text" @bind="Description"></textarea></div>
+    </div>
+    <div class="row">
+        <div class="col"><label>Events :</label></div>
+    </div>
+    <div class="row">
+        <div class="col"><textarea class="hbc-big-text" placeholder="Split with '--', e.g. 'MyEvent -- Demo event for intro.'" @bind="EventText"></textarea></div>
+    </div>
+    <div class="row">
+        <div class="col"><label>Fields :</label> </div>
+    </div>
+    <div class="row">
+        <div class="col"><textarea class="hbc-big-text" placeholder="Split with '--', e.g. 'MyField -- Demo field for intro.'" @bind="FieldText"></textarea></div>
+    </div>
+    <div class="row">
+        <div class="col"><label>Methods :</label> </div>
+    </div>
+    <div class="row">
+        <div class="col"><textarea class="hbc-big-text" placeholder="Split with '--', e.g. 'MyMethod -- Demo method for intro.'" @bind="MethodText"></textarea></div>
+    </div>
+    <div class="row">
+        <div class="col"><button class="btn btn-primary" @onclick="Generate">Generate</button></div>
+        <div class="col">
             <label>IsPython : </label>
             <input type="checkbox" @bind="IsPython" />
         </div>
+        <div class="col-8"></div>
+    </div>
+    <div class="row">
+        <div class="col"><label>Output comments : </label></div>
     </div>
     <div class="row">
         <div class="col">
-            <label>Project Name : </label>
-            <input @bind="ProjectName" />
-        </div>
-        <div class="col">
-            <label>File Name : </label>
-            <input @bind="FileName" />
-        </div>
-        <div class="col">
-            <label>Description : </label>
-            <input @bind="Description" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <label>Creator : </label>
-            <input @bind="Creator" />
-        </div>
-        <div class="col">
-            <label>Create Date : </label>
-            <input @bind="Create" />
-        </div>
-        <div class="col">
-            <label>Update Date : </label>
-            <input @bind="Update" />
+            <textarea class="hbc-big-text" style="font-family:consolas">@_comments</textarea>
         </div>
     </div>
 </div>
-
-<div class="container">
-    <div class="row">
-        <label>Events :</label>
-        <textarea @bind="EventText" />
-    </div><div class="row">
-        <label>Fields :</label>
-        <textarea @bind="FieldText" />
-    </div><div class="row">
-        <label>Methods :</label>
-        <textarea @bind="MethodText" />
-    </div>
-
-</div>
-
-<button class="btn btn-primary" @onclick="Generate">Generate</button>
 
 @* <div class="container">
     <ul id="field-list">
@@ -111,57 +135,62 @@
     </ul>
 </div> *@
 
-<textarea style="width:1920px;height:1920px;font-family:consolas">@_comments</textarea>
 
 @code {
+    private static readonly string PROJ_NAME = "My Project";
+    private static readonly string FILE_NAME = "My File";
+    private static readonly string DESCRIPTION = "-";
+    private static readonly string CREATOR = "Anonymous";
+
     private string? _comments;
     private bool IsPython { get; set; } = false;
     private int Width { get; set; } = 96;
     private bool IsMemberBlock { get; set; } = false;
-    private string? ProjectName { get; set; } = "My Project";
-    private string? FileName { get; set; } = "My File";
-    private string? Description { get; set; } = "-";
-    private string? Creator { get; set; } = "Anonymous";
+    private string? ProjectName { get; set; } = PROJ_NAME;
+    private string? FileName { get; set; } = FILE_NAME;
+    private string? Description { get; set; } = DESCRIPTION;
+    private string? Creator { get; set; } = CREATOR;
     private string? Create { get; set; }
     private string? Update { get; set; }
     private string? EventText { get; set; } = string.Empty;
     private string? FieldText { get; set; } = string.Empty;
     private string? MethodText { get; set; } = string.Empty;
 
-    private IList<ItemLine> EventLines = new List<ItemLine>();
-    private IList<ItemLine> FieldLines = new List<ItemLine>();
-    private IList<ItemLine> MethodLines = new List<ItemLine>();
+    // private IList<ItemLine> EventLines = new List<ItemLine>();
+    // private IList<ItemLine> FieldLines = new List<ItemLine>();
+    // private IList<ItemLine> MethodLines = new List<ItemLine>();
 
-    private class ItemLine { public string Name { get; set; } public string Info { get; set; } }
+    // private class ItemLine { public string Name { get; set; } public string Info { get; set; } }
 
-    private void ModifyMethod(int idx, bool additive = true)
-    {
-        if (additive) MethodLines.Insert(idx + 1, new ItemLine { Name = "MyMethod", Info = "-" });
-        else MethodLines.RemoveAt(idx);
-        // return new EventCallback();
-    }
+    // private void ModifyMethod(int idx, bool additive = true)
+    // {
+    //     if (additive) MethodLines.Insert(idx + 1, new ItemLine { Name = "MyMethod", Info = "-" });
+    //     else MethodLines.RemoveAt(idx);
+    //     // return new EventCallback();
+    // }
 
-    private void ModifyEvent(int idx, bool additive = true)
-    {
-        if (additive) EventLines.Insert(idx + 1, new ItemLine { Name = "MyEvent", Info = "-" });
-        else EventLines.RemoveAt(idx);
-        // return new EventCallback();
-    }
+    // private void ModifyEvent(int idx, bool additive = true)
+    // {
+    //     if (additive) EventLines.Insert(idx + 1, new ItemLine { Name = "MyEvent", Info = "-" });
+    //     else EventLines.RemoveAt(idx);
+    //     // return new EventCallback();
+    // }
 
-    private void ModifyField(int idx, bool additive = true)
-    {
-        if (additive) FieldLines.Insert(idx + 1, new ItemLine { Name = "MyField", Info = "-" });
-        else FieldLines.RemoveAt(idx);
-        // return new EventCallback();
-    }
+    // private void ModifyField(int idx, bool additive = true)
+    // {
+    //     if (additive) FieldLines.Insert(idx + 1, new ItemLine { Name = "MyField", Info = "-" });
+    //     else FieldLines.RemoveAt(idx);
+    //     // return new EventCallback();
+    // }
 
 
     private void Generate()
     {
         var commentator = BlockCommentator.CreateInstance();
         commentator.SetIsPython(IsPython).SetWidth(Width).SetIsMember(IsMemberBlock)
-            .SetProjectName(ProjectName).SetFileName(FileName).SetDescription(Description)
-            .SetProgrammer(Creator);
+            .SetProjectName(ProjectName ?? PROJ_NAME).SetFileName(FileName ?? FILE_NAME)
+            .SetProgrammer(Creator ?? CREATOR)
+            .SetDescription(Description ?? DESCRIPTION);
 
         var succ = DateTime.TryParse(Create, out var res);
         commentator.SetCreate(succ ? res : DateTime.Now);
@@ -170,27 +199,29 @@
         // foreach (var line in EventLines) commentator.AppendEvent(line.Name, line.Info);
         // foreach (var line in FieldLines) commentator.AppendField(line.Name, line.Info);
         // foreach (var line in MethodLines) commentator.AppendMethod(line.Name, line.Info);
-        foreach (var line in EventText.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+        foreach (var line in EventText?.Split('\n', StringSplitOptions.RemoveEmptyEntries) ?? new string[] { })
         {
             try
             {
-                var ss = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                var ss = line.Split("--", StringSplitOptions.RemoveEmptyEntries);
                 commentator.AppendEvent(ss[0], ss[1]);
             }
             catch { }
-        }foreach (var line in FieldText.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+        }
+        foreach (var line in FieldText?.Split('\n', StringSplitOptions.RemoveEmptyEntries) ?? new string[] { })
         {
             try
             {
-                var ss = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                var ss = line.Split("--", StringSplitOptions.RemoveEmptyEntries);
                 commentator.AppendField(ss[0], ss[1]);
             }
             catch { }
-        }foreach (var line in MethodText.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+        }
+        foreach (var line in MethodText?.Split('\n', StringSplitOptions.RemoveEmptyEntries) ?? new string[] { })
         {
             try
             {
-                var ss = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                var ss = line.Split("--", StringSplitOptions.RemoveEmptyEntries);
                 commentator.AppendMethod(ss[0], ss[1]);
             }
             catch { }

@@ -195,19 +195,19 @@ public class BlockCommentator
     /// </summary>
     public string GenerateMemberComment() => new System.Text.StringBuilder()
         .AppendLine(IsPython ? GetPyHeader() : GetCsHeader())
-        .AppendLine(IsPython ? GetPyMiddled(MemberName) : GetCsMiddled(MemberName))
+        .AppendLine(IsPython ? GetPyMiddled(MemberName.Trim()) : GetCsMiddled(MemberName.Trim()))
         .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
-        .AppendLine(IsPython ? GetPyMiddled(Description) : GetCsMiddled(Description))
+        .AppendLine(IsPython ? GetPyMiddled(Description.Trim()) : GetCsMiddled(Description.Trim()))
         .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
-        .AppendLine(IsPython ? GetPyLeft($"Created : {Programmer} at {Create.ToString("yyyy-MM-dd")}") : GetCsLeft($"Created : {Programmer} at {Create.ToString("yyyy-MM-dd")}"))
+        .AppendLine(IsPython ? GetPyLeft($"Created : {Programmer.Trim()} at {Create.ToString("yyyy-MM-dd")}") : GetCsLeft($"Created : {Programmer.Trim()} at {Create.ToString("yyyy-MM-dd")}"))
         .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
-        .AppendLine(IsPython ? GetPyLeft($"About: {Label}") : GetCsLeft($"About: {Label}"))
+        .AppendLine(IsPython ? GetPyLeft($"About: {Label.Trim()}") : GetCsLeft($"About: {Label.Trim()}"))
         .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
-        .AppendLine(IsPython ? GetPyLeft($"Updated : {Updater} at {Update.ToString("yyyy-MM-dd")}") : GetCsLeft($"Updated : {Updater} at {Update.ToString("yyyy-MM-dd")}"))
+        .AppendLine(IsPython ? GetPyLeft($"Updated : {Updater.Trim()} at {Update.ToString("yyyy-MM-dd")}") : GetCsLeft($"Updated : {Updater.Trim()} at {Update.ToString("yyyy-MM-dd")}"))
         .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
-        .AppendLine(IsPython ? GetPyLeft($"Modification: {Updatee}") : GetCsLeft($"Modification: {Updatee}"))
+        .AppendLine(IsPython ? GetPyLeft($"Modification: {Updatee.Trim()}") : GetCsLeft($"Modification: {Updatee.Trim()}"))
         .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
-        .AppendLine(IsPython ? GetPyLeft($"Warning: {Warning}") : GetCsLeft($"Warning: {Warning}"))
+        .AppendLine(IsPython ? GetPyLeft($"Warning: {Warning.Trim()}") : GetCsLeft($"Warning: {Warning.Trim()}"))
         .AppendLine(IsPython ? GetPyTail() : GetCsTail())
         .ToString();
 
@@ -221,11 +221,11 @@ public class BlockCommentator
         // Append header block.
         sb.AppendLine(IsPython ? GetPyHeader() : GetCsHeader())
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
-            .AppendLine(IsPython ? GetPyMiddled($"Project Name : {ProjectName}") : GetCsMiddled($"Project Name : {ProjectName}"))
+            .AppendLine(IsPython ? GetPyMiddled($"Project Name : {ProjectName.Trim()}") : GetCsMiddled($"Project Name : {ProjectName.Trim()}"))
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
-            .AppendLine(IsPython ? GetPyMiddled($"File Name : {FileName}") : GetCsMiddled($"File Name : {FileName}"))
+            .AppendLine(IsPython ? GetPyMiddled($"File Name : {FileName.Trim()}") : GetCsMiddled($"File Name : {FileName.Trim()}"))
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
-            .AppendLine(IsPython ? GetPyMiddled($"Programmer : {Programmer}") : GetCsMiddled($"Programmer : {Programmer}"))
+            .AppendLine(IsPython ? GetPyMiddled($"Programmer : {Programmer.Trim()}") : GetCsMiddled($"Programmer : {Programmer.Trim()}"))
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
             .AppendLine(IsPython ? GetPyMiddled($"Create : {Create.ToString("yyyy-MM-dd")}") : GetCsMiddled($"Create : {Create.ToString("yyyy-MM-dd")}"))
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
@@ -233,7 +233,7 @@ public class BlockCommentator
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
             .AppendLine(IsPython ? GetPySplitter() : GetCsSplitter())
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
-            .AppendLine(IsPython ? GetPyMiddled(Description) : GetCsMiddled(Description))
+            .AppendLine(IsPython ? GetPyMiddled(Description.Trim()) : GetCsMiddled(Description.Trim()))
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine());
 
         // Append event block.
@@ -242,7 +242,7 @@ public class BlockCommentator
             sb.AppendLine(IsPython ? GetPySplitter() : GetCsSplitter())
                 .AppendLine(IsPython ? GetPyLeft("Events:") : GetCsLeft("Events:"));
             _eventMap.OrderBy(x => x.Key)
-                .Select(x => IsPython ? GetPyLeft($"{string.Empty,2}{x.Key} -- {x.Value}") : GetCsLeft($"{string.Empty,2}{x.Key} -- {x.Value}"))
+                .Select(x => IsPython ? GetPyLeft($"{string.Empty,2}{x.Key.Trim()} -- {x.Value.Trim()}") : GetCsLeft($"{string.Empty,2}{x.Key.Trim()} -- {x.Value.Trim()}"))
                 .ToList().ForEach(x => sb.AppendLine(x));
         }
 
@@ -252,7 +252,7 @@ public class BlockCommentator
             sb.AppendLine(IsPython ? GetPySplitter() : GetCsSplitter())
                 .AppendLine(IsPython ? GetPyLeft("Fields:") : GetCsLeft("Fields:"));
             _fieldMap.OrderBy(x => x.Key)
-                .Select(x => IsPython ? GetPyLeft($"{string.Empty,2}{x.Key} -- {x.Value}") : GetCsLeft($"{string.Empty,2}{x.Key} -- {x.Value}"))
+                .Select(x => IsPython ? GetPyLeft($"{string.Empty,2}{x.Key.Trim()} -- {x.Value.Trim()}") : GetCsLeft($"{string.Empty,2}{x.Key.Trim()} -- {x.Value.Trim()}"))
                 .ToList().ForEach(x => sb.AppendLine(x));
         }
 
@@ -262,7 +262,7 @@ public class BlockCommentator
             sb.AppendLine(IsPython ? GetPySplitter() : GetCsSplitter())
                 .AppendLine(IsPython ? GetPyLeft("Methods:") : GetCsLeft("Methods:"));
             _methodMap.OrderBy(x => x.Key)
-                .Select(x => IsPython ? GetPyLeft($"{string.Empty,2}{x.Key} -- {x.Value}") : GetCsLeft($"{string.Empty,2}{x.Key} -- {x.Value}"))
+                .Select(x => IsPython ? GetPyLeft($"{string.Empty,2}{x.Key.Trim()} -- {x.Value.Trim()}") : GetCsLeft($"{string.Empty,2}{x.Key.Trim()} -- {x.Value.Trim()}"))
                 .ToList().ForEach(x => sb.AppendLine(x));
         }
 
