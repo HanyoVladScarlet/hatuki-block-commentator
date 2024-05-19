@@ -223,7 +223,7 @@ public class BlockCommentator
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
             .AppendLine(IsPython ? GetPyMiddled($"Project Name : {ProjectName}") : GetCsMiddled($"Project Name : {ProjectName}"))
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
-            .AppendLine(IsPython ? GetPyMiddled(FileName) : GetCsMiddled($"File Name : {FileName}"))
+            .AppendLine(IsPython ? GetPyMiddled($"File Name : {FileName}") : GetCsMiddled($"File Name : {FileName}"))
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
             .AppendLine(IsPython ? GetPyMiddled($"Programmer : {Programmer}") : GetCsMiddled($"Programmer : {Programmer}"))
             .AppendLine(IsPython ? GetPyEmptyLine() : GetCsEmptyLine())
